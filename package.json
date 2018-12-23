@@ -1,0 +1,25 @@
+{
+  "name": "agent-pepe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "agent.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node agent.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheScriptwriter/Agent-Pepe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheScriptwriter/Agent-Pepe/issues"
+  },
+  "homepage": "https://github.com/TheScriptwriter/Agent-Pepe#readme",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "enmap": "^4.6.6",
+    "sqlite": "^3.0.0"
+  }
+}

@@ -1,0 +1,24 @@
+module.exports = (client, oldMember, newMember) => {
+  let oldUserChannel = oldMember.voiceChannel
+  let newUserChannel = newMember.voiceChannel
+
+  var member = newMember.id
+  if (oldUserChannel === undefined && newUserChannel !== undefined) {
+    //user joined
+    if (authorized_persons.includes(member)) {
+      //if is admin
+      console.log("Admin has joined to voice channel.")
+      newUserChannel.join().then(connection => {
+        const dispatcher = connection.playFile('./admin.mp3');
+        dispatcher.on("end", end => {
+          newUserChannel.leave();
+        });
+      }).catch(err => console.log(err));
+    } else {
+      //if not admin
+      console.log(member + " just joined to voice channel")
+    }
+  } else if (newUserChannel === undefined) {
+    //run something when user left
+  }
+};
