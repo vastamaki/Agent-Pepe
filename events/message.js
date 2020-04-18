@@ -36,7 +36,7 @@ module.exports = (client, message) => {
   if (!cmd)
     return (
       message.delete(0) &&
-      message.reply("This command doens't exists!").then(msg => {
+      message.reply("This command doesn't exist!").then(msg => {
         msg.delete(3000);
       })
     );

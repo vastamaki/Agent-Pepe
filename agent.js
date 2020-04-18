@@ -1,18 +1,13 @@
-global.Discord = require("discord.js");
+const Discord = require("discord.js");
+const client = new Discord.Client();
 const Enmap = require("enmap");
 const fs = require("fs");
-global.sql = require("sqlite");
-
-const client = new Discord.Client();
 const config = require("./config.json");
 client.config = config;
 client.commands = new Enmap();
+const commands_dir = './commands/'
 
 client.on("error", console.error);
-
-sql.open("./databases/cryptic.sqlite");
-
-global.adminid = "";
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
@@ -24,11 +19,11 @@ fs.readdir("./events/", (err, files) => {
   });
 });
 
-fs.readdir("./commands/", (err, files) => {
+fs.readdir(commands_dir, (err, files) => {
   if (err) return console.error(err);
   files.forEach(file => {
     if (!file.endsWith(".js")) return;
-    let props = require(`./commands/${file}`);
+    let props = require(commands_dir + file);
     let commandName = file.split(".")[0];
     console.log(`Command ${commandName} loaded successfully!`);
     client.commands.set(commandName, props);
