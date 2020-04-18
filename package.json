@@ -18,8 +18,8 @@
   },
   "homepage": "https://github.com/TheScriptwriter/Agent-Pepe#readme",
   "dependencies": {
-    "discord.js": "^11.4.2",
-    "enmap": "^4.6.6",
+    "discord.js": "^12.2.0",
+    "enmap": "^5.2.4",
     "sqlite": "^4.0.7",
     "sqlite3": "^4.1.1"
   }
