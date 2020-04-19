@@ -1,41 +1,24 @@
+const SQLite = require("better-sqlite3");
+
 exports.run = (client, message, args, role) => {
+  const sql = new SQLite(`./databases/${message.guild.id}.sqlite`);
   message.delete();
   if (!args[0]) {
-    sql.run(
-      `UPDATE users SET afkreason = "" where id = "${message.author.id}"`
-    );
-    sql.run(
-      `UPDATE users SET afkstatus = "0" where id = "${message.author.id}"`
-    );
-    message.reply("AFK status cleared.").then(msg => {
-      msg.delete(5000);
+    sql
+      .prepare(`REPLACE INTO afk (id,afk) VALUES (${message.author.id}, false)`)
+      .run();
+    message.reply("AFK status cleared.").then((message) => {
+      message.delete({ timeout: 5000 });
     });
     return;
   }
-  sql.get(`SELECT * FROM users WHERE id ="${message.author.id}"`).then(row => {
-    if (!row) {
-      var reason = args.join(" ");
-      sql.run("INSERT INTO users (id, afkreason, afkstatus) VALUES (?, ?, ?)", [
-        message.author.id,
-        reason,
-        "1"
-      ]);
-      message.reply(`You are now in afk with status: ${reason}`).then(msg => {
-        msg.delete(5000);
-      });
-    } else {
-      var reason = args.join(" ");
-      sql.run(
-        `UPDATE users SET afkstatus = "1" where id = "${message.author.id}"`
-      );
-      sql.run(
-        `UPDATE users SET afkreason = "${reason}" where id = "${
-          message.author.id
-        }"`
-      );
-      message.reply(`You are now in afk with status: ${reason}`).then(msg => {
-        msg.delete(5000);
-      });
-    }
+  const reason = args.join(" ");
+  sql
+    .prepare(
+      `REPLACE INTO afk (id,reason,afk) VALUES (${message.author.id}, '${reason}',true)`
+    )
+    .run();
+  message.reply(`You are now in afk with status: ${reason}`).then((message) => {
+    message.delete({ timeout: 5000 });
   });
 };

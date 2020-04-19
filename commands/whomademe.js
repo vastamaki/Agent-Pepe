@@ -1,4 +1,4 @@
-exports.run = (client, message, channel, args) => {
+exports.run = (client, message) => {
   message.channel.send({
     embed: {
       url: "https://discordapp.com",
@@ -6,11 +6,11 @@ exports.run = (client, message, channel, args) => {
       fields: [
         {
           name: "Who?",
-          value: "Cryptic#8783 has created me."
+          value: "Rainmaker#6885 has created me."
         },
         {
           name: "Why?",
-          value: "I don't even know, I just like programming alot lol :-)"
+          value: "Just for fun :)"
         },
         {
           name: "Coffee? Coffee.",
@@ -18,8 +18,8 @@ exports.run = (client, message, channel, args) => {
             "If you are the type of person who digs attention to detail, know how much work is involved in it and/or simply likes to support makers with a coffee or a beer, I would greatly appreciate your donation"
         },
         {
-          name: "Want send some coffee ??",
-          value: "I would appreciate it very much. https://paypal.me/CrypticFin"
+          name: "Where can i donate?",
+          value: "Thanks for considering this, please DM me:)"
         }
       ]
     }

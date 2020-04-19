@@ -1,5 +1,6 @@
 exports.run = (client, message, args, role) => {
-  if (!message.author.id == adminid) {
+  const helpers = require("../helpers/index");
+  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
@@ -11,14 +12,14 @@ exports.run = (client, message, args, role) => {
       .catch(error =>
         message.reply(`Couldn't kick member because of: ${error}`)
       );
-    message.delete(0);
+    message.delete();
     message.channel.send(
       `${member} just kicked from the server. Reason: ${reason}.`
     );
   } else {
-    message.delete(0);
-    message.channel.send("Please mention user to kick.").then(msg => {
-      msg.delete(3000);
+    message.delete();
+    message.channel.send("Please mention user to kick.").then(message => {
+      message.delete({"timeout": 3000});
     });
   }
 };

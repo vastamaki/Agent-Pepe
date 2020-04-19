@@ -1,5 +1,6 @@
 exports.run = (client, message, args) => {
-  if (!message.author.id == adminid) {
+  const helpers = require("../helpers/index");
+  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }

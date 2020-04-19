@@ -1,5 +1,6 @@
 exports.run = async (client, message, args) => {
-  if (!message.author.id == adminid) {
+  const helpers = require("../helpers/index");
+  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
@@ -11,17 +12,17 @@ exports.run = async (client, message, args) => {
     );
 
   const fetched = await message.channel.fetchMessages({
-    limit: deleteCount
+    limit: deleteCount,
   });
   message.channel
     .bulkDelete(fetched)
-    .catch(error =>
+    .catch((error) =>
       message.reply(`Couldn't delete messages because of: ${error}`)
     );
   message.channel
     .send(`Removed ${deleteCount} messages.`)
-    .then(msg => {
-      msg.delete(3000);
+    .then((message) => {
+      message.delete({ timeout: 3000 });
     })
     .catch(console.log);
 };

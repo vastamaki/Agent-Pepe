@@ -1,22 +1,19 @@
-exports.run = (client, message, args, role) => {
-  if (!message.author.id == adminid) {
+exports.run = (client, message, args) => {
+  const helpers = require('../helpers/index')
+  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
-  if (message.mentions.members.first() && message.author.id == adminid) {
+  if (message.mentions.members.first()) {
     var mentionedrole = args[1];
     let member = message.mentions.members.first();
-    let role = message.guild.roles.find(role => role.name === mentionedrole);
-    if (role == null && message.author.id == adminid) {
-      message.reply("please enter correct role name.");
+    let role = message.guild.roles.cache.find((role) => role.name === mentionedrole);
+    if (role == null) {
+      message.reply("I was not able to find that role :/");
       return;
     }
-    member.addRole(role.id);
-  } else if (message.author.id != adminid) {
-    message.reply("sorry, your permission level is too low.");
+    member.roles.add(role.id).catch(err => console.log(err))
   } else if (!message.mentions.members.first()) {
-    message.reply("please mention user first.");
-  } else {
-    message.reply("this command is currently in developement.");
+    message.reply("Mention the user you want to assign this role to! :)");
   }
 };
