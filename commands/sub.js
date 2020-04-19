@@ -1,29 +1,30 @@
 exports.run = (client, message, args) => {
   message.delete();
   if (!args[0]) {
-    const regemb = new Discord.RichEmbed()
+    const EmbedMessage = new Discord.RichEmbed()
       .setColor(0x33cc66)
       .addField(
         "Please type one of categories after subscribe!",
-        "Example: ;sub gambling"
+        "Example: ;sub +NSFW"
       )
-      .addField("gambling", "Get access to gambling channels.")
-      .addField("nsfw", "Get access to nsfw channels.");
+      .addField("+NSFW", "Access to NSFW channels");
 
-    message.channel.send(regemb).then(msg => {
-      msg.delete(10000);
+    message.channel.send(EmbedMessage).then((message) => {
+      message.delete({ timeout: 10000 });
     });
-  } else if (args[0] == "gambling") {
-    message.member.addRole(message.guild.roles.find(r => r.name === "Gambler"));
-    message
-      .reply(`now you should have access to gambling channels!`)
-      .then(msg => {
-        msg.delete(5000);
+  } else {
+    const allowedRoles = ["+NSFW"];
+    if (allowedRoles.includes(args[0])) {
+      message.member.roles.add(
+        message.guild.roles.cache.find((role) => role.name === args[0])
+      );
+      message.reply(`Unsub successfull!`).then((message) => {
+        message.delete({ timeout: 3000 });
       });
-  } else if (args[0] == "nsfw") {
-    message.member.addRole(message.guild.roles.find(r => r.name === "+NSFW"));
-    message.reply(`now you should have access to NSFW channels!`).then(msg => {
-      msg.delete(5000);
-    });
+    } else {
+      message.reply(
+        `You are not allowed to give this role to yourself. Nice to try tho :)`
+      );
+    }
   }
 };

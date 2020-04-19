@@ -1,5 +1,6 @@
-exports.run = (client, message, args, role) => {
-  if (!message.author.id == adminid) {
+exports.run = (client, message, args) => {
+  const helpers = require("../helpers/index");
+  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
@@ -7,18 +8,20 @@ exports.run = (client, message, args, role) => {
   reason = args.slice(1).join(" ");
   if (member) {
     member
-      .ban(reason)
-      .catch(error =>
+      .ban({ reason: reason })
+      .catch((error) =>
         message.reply(`Couldn't kick member because of: ${error}`)
       );
-    message.delete(0);
+    message.delete();
     message.channel.send(
-      `${member} just banned from the server because ${reason}.`
+      `${member} just got banned from the server ${
+        reason ? "because of " + reason + "." : "."
+      }`
     );
   } else {
-    message.delete(0);
-    message.channel.send("Please mention user to ban.").then(msg => {
-      msg.delete(3000);
+    message.delete();
+    message.channel.send("Please mention user to ban.").then((message) => {
+      message.delete({ timeout: 3000 });
     });
   }
 };

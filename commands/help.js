@@ -6,41 +6,41 @@ exports.run = (client, message, args, role) => {
       fields: [
         {
           name: ";addrole",
-          value: "Usage: ;addrole <member> <role>"
+          value: "Usage: ;addrole <member> <role>",
         },
         {
           name: ";ban",
-          value: "Usage: ;ban <username>"
+          value: "Usage: ;ban <username>",
         },
         {
           name: ";help",
-          value: "Usage: ;help"
+          value: "Usage: ;help",
         },
         {
           name: ";kick",
-          value: "Usage: ;kick <member> <optional reason>"
+          value: "Usage: ;kick <member> <optional reason>",
         },
         {
           name: ";purge",
-          value: "Usage: ;purge <message count>"
+          value: "Usage: ;purge <message count>",
         },
         {
           name: ";register",
-          value: "Usage: TBA"
+          value: "Usage: TBA",
         },
         {
           name: ";reload",
-          value: "Usage: ;reload <command name>"
+          value: "Usage: ;reload <command name>",
         },
         {
           name: ";say",
-          value: "Usage: ;say <optional channel> <message>"
+          value: "Usage: ;say <optional channel> <message>",
         },
         {
           name: ";verify",
-          value: "Usage: ;verify <if admin, member here>"
-        }
-      ]
-    }
+          value: "Usage: ;verify <if admin, member here>",
+        },
+      ],
+    },
   });
 };

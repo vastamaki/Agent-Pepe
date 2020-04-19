@@ -2,8 +2,8 @@ const Discord = require("discord.js");
 const ms = require("ms");
 
 exports.run = async (client, message, args) => {
-  if (!message.author.id == adminid) {
-    message.reply("Hmm. You dont have access to this command.");
+  const helpers = require("../helpers/index");
+  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
     return;
   }
   let tomute = message.guild.member(

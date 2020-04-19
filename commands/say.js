@@ -1,17 +1,18 @@
 exports.run = (client, message, args) => {
-  if (!message.author.id == adminid) {
+  const helpers = require("../helpers/index");
+  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
   if (message.mentions.channels.first()) {
     let channel = args[0];
-    const msg = args.slice(1).join(" ");
+    const message = args.slice(1).join(" ");
     channel = channel.replace(/\D/g, "");
     message.delete();
-    client.channels.get(channel).send(msg);
+    client.channels.get(channel).send(message);
   } else {
-    const msg = args.join(" ");
     message.delete();
+    const msg = args.join(" ");
     message.channel.send(msg);
   }
 };
