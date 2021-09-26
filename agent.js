@@ -1,17 +1,37 @@
-const Discord = require("discord.js");
-const client = new Discord.Client();
+const { Client, Intents } = require("discord.js");
 const Enmap = require("enmap");
 const fs = require("fs");
+
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+
 const config = require("./config.json");
+
 client.config = config;
 client.commands = new Enmap();
-const commands_dir = './commands/'
+
+const commands_dir = "./commands/";
 
 client.on("error", console.error);
 
+client.on("interactionCreate", async (interaction) => {
+  console.log(interaction);
+  if (!interaction.isCommand()) return;
+
+  if (interaction.commandName === "ping") {
+    const row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId("primary")
+        .setLabel("Primary")
+        .setStyle("PRIMARY")
+    );
+
+    await interaction.reply({ content: "Pong!", components: [row] });
+  }
+});
+
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
-  files.forEach(file => {
+  files.forEach((file) => {
     if (!file.endsWith(".js")) return;
     const event = require(`./events/${file}`);
     let eventName = file.split(".")[0];
@@ -21,7 +41,7 @@ fs.readdir("./events/", (err, files) => {
 
 fs.readdir(commands_dir, (err, files) => {
   if (err) return console.error(err);
-  files.forEach(file => {
+  files.forEach((file) => {
     if (!file.endsWith(".js")) return;
     let props = require(commands_dir + file);
     let commandName = file.split(".")[0];
