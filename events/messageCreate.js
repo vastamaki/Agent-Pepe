@@ -1,6 +1,6 @@
 const SQLite = require("better-sqlite3");
 
-module.exports = (client, message) => {
+module.exports = (message, client) => {
   if (message.author.bot) return;
   const sql = new SQLite(`./databases/${message.guild.id}.sqlite`);
   const mentionedUser = message.mentions.users.first();
@@ -31,15 +31,13 @@ module.exports = (client, message) => {
 
   const cmd = client.commands.get(command);
 
-  if (!cmd)
-    return (
-      message.delete() &&
-      message
-        .reply(`Sorry, i don't know command: ${command} :/`)
-        .then((message) => {
-          message.delete({ timeout: 3000 });
-        })
-    );
-
-  cmd.run(client, message, args);
+  if (cmd) {
+    return cmd.run(client, message, args);
+  }
+  message.reply(`Sorry, i don't know command: ${command} :/`).then((msg) => {
+    setTimeout(() => {
+      msg.delete();
+      message.delete();
+    }, 3000);
+  });
 };
