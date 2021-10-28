@@ -18,6 +18,10 @@ const commands_dir = "./commands/";
 
 client.on("error", console.error);
 
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled promise rejection:", error);
+});
+
 const eventFiles = fs
   .readdirSync("./events")
   .filter((file) => file.endsWith(".js"));
