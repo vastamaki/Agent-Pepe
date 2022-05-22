@@ -5,7 +5,7 @@
   "main": "agent.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node agent.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "@discordjs/voice": "^0.7.5",
     "better-sqlite3": "^7.4.4",
     "discord.js": "^13.2.0",
+    "dotenv": "^16.0.1",
     "enmap": "^5.8.7",
     "ffmpeg-static": "^4.4.0",
     "ms": "^2.1.3",

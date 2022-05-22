@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { Client, Intents, Collection } = require("discord.js");
 const fs = require("fs");
 
@@ -9,9 +11,9 @@ const client = new Client({
   ],
 });
 
-const config = require("./config.json");
+const { DISCORD_BOT_TOKEN } = process.env
 
-client.config = config;
+client.config = {};
 client.commands = new Collection();
 
 const commands_dir = "./commands/";
@@ -46,4 +48,4 @@ for (const file of commandFiles) {
   console.log(`Command ${commandName} loaded successfully!`);
 }
 
-client.login(config.token);
+client.login(DISCORD_BOT_TOKEN);
