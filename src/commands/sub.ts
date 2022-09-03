@@ -1,13 +1,18 @@
-exports.run = (client, message, args) => {
+import { EmbedBuilder } from "discord.js";
+
+export default async (_, message, args) => {
   message.delete();
   if (!args[0]) {
-    const EmbedMessage = new Discord.RichEmbed()
-      .setColor(0x33cc66)
-      .addField(
-        "Please type one of categories after subscribe!",
-        "Example: ;sub +NSFW"
-      )
-      .addField("+NSFW", "Access to NSFW channels");
+    const EmbedMessage = new EmbedBuilder().setColor(0x33cc66).addFields([
+      {
+        name: "Please type one of categories after subscribe!",
+        value: "Example: ;sub +NSFW",
+      },
+      {
+        name: "+NSFW",
+        value: "Access to NSFW channels",
+      },
+    ]);
 
     message.channel.send(EmbedMessage).then((message) => {
       message.delete({ timeout: 10000 });

@@ -1,11 +1,12 @@
-exports.run = (client, message, args) => {
-  const helpers = require("../helpers/index");
-  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
+import { getOwnerID } from "helpers";
+
+export default async (_, message, args) => {
+  if (!message.author.id === getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
-  member = message.mentions.members.first();
-  reason = args.slice(1).join(" ");
+  const member = message.mentions.members.first();
+  const reason = args.slice(1).join(" ");
   if (member) {
     member
       .ban({ reason: reason })

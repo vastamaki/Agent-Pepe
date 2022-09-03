@@ -1,8 +1,8 @@
-const SQLite = require("better-sqlite3");
-const fs = require("fs");
+import Database from "better-sqlite3";
+import { mkdirSync, writeFile, existsSync } from "fs";
 
-const getOwnerID = (guildID) => {
-  const sql = new SQLite(`./databases/${guildID}.sqlite`);
+export const getOwnerID = (guildID: string) => {
+  const sql = new Database(`./databases/${guildID}.sqlite`);
   const row = sql.prepare(`SELECT * FROM admins`).get();
   if (row) {
     console.log(`Admin found`);
@@ -10,19 +10,20 @@ const getOwnerID = (guildID) => {
   }
 };
 
-const initBot = () => {
+export const initBot = () => {
   try {
-    if (!fs.existsSync("./databases")) {
-      fs.mkdirSync("databases");
+    if (!existsSync("./databases")) {
+      mkdirSync("databases");
     }
-    if (!fs.existsSync("./databases/servers.sqlite")) {
-      fs.writeFile("./databases/servers.sqlite", "", () => null);
+    if (!existsSync("./databases/servers.sqlite")) {
+      writeFile("./databases/servers.sqlite", "", () => null);
     }
   } catch (err) {
     console.error(err);
   }
 
-  const sql = new SQLite(`./databases/servers.sqlite`);
+  const sql = new Database(`./databases/servers.sqlite`);
+
   sql
     .prepare(
       `CREATE TABLE IF NOT EXISTS servers(id INTEGER UNIQUE, owner BOOLEAN)`
@@ -30,14 +31,15 @@ const initBot = () => {
     .run();
 };
 
-const initGuilds = (guilds) => {
-  const server = new SQLite(`./databases/servers.sqlite`);
+export const initGuilds = (guilds) => {
+  const server = new Database(`./databases/servers.sqlite`);
+
   guilds.forEach((guild) => {
     const existing = server
       .prepare(`SELECT * FROM servers WHERE id = ${guild.id}`)
       .get();
 
-    const sql = new SQLite(`./databases/${guild.id}.sqlite`);
+    const sql = new Database(`./databases/${guild.id}.sqlite`);
 
     if (!existing) {
       server
@@ -45,6 +47,7 @@ const initGuilds = (guilds) => {
           `INSERT INTO servers (id,owner) VALUES (${guild.id}, ${guild.ownerId})`
         )
         .run();
+
       console.log(`${guild.id} is missing from database, creation started!`);
 
       sql
@@ -52,6 +55,7 @@ const initGuilds = (guilds) => {
           `CREATE TABLE IF NOT EXISTS admins(id INTEGER UNIQUE, owner BOOLEAN)`
         )
         .run();
+
       sql
         .prepare(
           `CREATE TABLE IF NOT EXISTS config(prefix STRING UNIQUE DEFAULT ';')`
@@ -65,6 +69,7 @@ const initGuilds = (guilds) => {
         .run();
       sql.prepare(`REPLACE INTO config (prefix) VALUES (';')`).run();
     }
+
     sql
       .prepare(
         `CREATE TABLE IF NOT EXISTS users(id INTEGER UNIQUE, afk BOOLEAN)`
@@ -81,10 +86,4 @@ const initGuilds = (guilds) => {
       )
       .run();
   });
-};
-
-module.exports = {
-  getOwnerID,
-  initGuilds,
-  initBot,
 };

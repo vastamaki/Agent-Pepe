@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@helpers": ["src/helpers"],
+      "@commands/*": ["src/commands/*"],
+      "@events": ["src/events/*"]
+    }
+  }
+}
