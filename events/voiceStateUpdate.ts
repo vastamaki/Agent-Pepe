@@ -3,9 +3,10 @@ import {
   createAudioPlayer,
   createAudioResource,
 } from "@discordjs/voice";
-import { Role, VoiceState } from "discord.js";
+import { ChannelType, PermissionFlagsBits, Role, VoiceState } from "discord.js";
 import { join } from "path";
 import { sleep } from "../helpers";
+import { nanoid } from "nanoid";
 
 const channels = [
   "903351306582896661",
@@ -21,6 +22,61 @@ const voiceStateUpdate = async (
   oldMember: VoiceState,
   newMember: VoiceState
 ) => {
+  if (oldMember?.channel?.name === "Lobby") {
+    const elevatorAccessRole = newMember.guild.roles.cache.find(
+      (role) => role.name === "Elevator Access"
+    );
+    await newMember.member.roles.remove(elevatorAccessRole);
+  }
+  if (newMember?.channel?.name === "Lobby") {
+    const elevatorAccessRole = newMember.guild.roles.cache.find(
+      (role) => role.name === "Elevator Access"
+    );
+    await newMember.member.roles.add(elevatorAccessRole);
+  }
+  if (oldMember?.channel?.name.endsWith("tmp") && !newMember.channel) {
+    const connectedUsers = oldMember.channel.members;
+    if (!connectedUsers.lastKey()) {
+      await oldMember.channel.delete();
+    }
+  }
+  if (
+    newMember.channel?.name === "Authorized persons only" &&
+    newMember.member.roles.cache.some((role) => role.name === "Authorized")
+  ) {
+    const existingVoice = newMember.guild.channels.cache.find(
+      (channel) =>
+        channel.type === ChannelType.GuildVoice && channel?.name.endsWith("tmp")
+    );
+    if (existingVoice) {
+      newMember.setChannel(existingVoice.id);
+      return;
+    }
+    const newChannel = await newMember.guild?.channels.create({
+      name: nanoid() + "tmp",
+      type: ChannelType.GuildVoice,
+      reason: "Needed a new channel",
+      parent: newMember.channel.parentId,
+      permissionOverwrites: [
+        {
+          id: newMember.guild.roles.everyone,
+          deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.Connect],
+        },
+        {
+          id: newMember.guild.roles.cache.find(
+            (role) => role.name === "Authorized"
+          ),
+          allow: [
+            PermissionFlagsBits.Connect,
+            PermissionFlagsBits.MoveMembers,
+            PermissionFlagsBits.ViewChannel,
+          ],
+        },
+      ],
+    });
+
+    await newMember.setChannel(newChannel);
+  }
   if (
     oldMember.channel?.name === "Lobby" &&
     newMember.channel?.name === "Elevator"
