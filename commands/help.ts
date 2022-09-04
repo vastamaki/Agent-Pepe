@@ -1,4 +1,4 @@
-exports.run = (client, message, args, role) => {
+export default async (_, message) => {
   message.channel.send({
     embed: {
       title: "Commands!",

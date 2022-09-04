@@ -1,12 +1,12 @@
-const {
+import {
   getVoiceConnection,
   createAudioPlayer,
   createAudioResource,
-} = require("@discordjs/voice");
+} from "@discordjs/voice";
 
-const { join } = require("path");
+import { join } from "path";
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const channels = [
   "903351306582896661",
@@ -18,15 +18,14 @@ const channels = [
 
 const penthouseId = "692416528317939793";
 
-module.exports = async (oldMember, newMember) => {
-  const hasPenthouseAccess = oldMember.member.roles.cache.find(
-    (role) => role.name === "Penthouse Access"
-  );
-
+const voiceStateUpdate = async (oldMember, newMember) => {
   if (
     oldMember.channel?.name === "Lobby" &&
     newMember.channel?.name === "Elevator"
   ) {
+    const hasPenthouseAccess = oldMember.member.roles.cache.find(
+      (role) => role.name === "Penthouse Access"
+    );
     for (const i in channels) {
       try {
         newMember.member.voice.setChannel(channels[i]);
@@ -79,3 +78,5 @@ module.exports = async (oldMember, newMember) => {
     }
   }
 };
+
+export default voiceStateUpdate;

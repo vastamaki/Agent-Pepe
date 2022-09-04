@@ -1,9 +1,10 @@
-exports.run = (client, message) => {
-  const helpers = require("../helpers/index");
+import { getOwnerID } from "../helpers";
+
+export default async (_, message) => {
   if (message.channel.name == "verify") {
     let member = message.mentions.members.first();
 
-    if (member && !message.author.id == helpers.getOwnerID(message.guild.id)) {
+    if (member && !message.author.id === getOwnerID(message.guild.id)) {
       if (member.roles.some((r) => ["Verified"].includes(r.name))) {
         message.delete();
         return message.channel.send(`${member} is already verified.`);

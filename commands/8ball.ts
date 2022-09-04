@@ -1,4 +1,4 @@
-exports.run = (client, message) => {
+export default async (_, message) => {
   var texts = [
     "Yes",
     "No",
@@ -31,7 +31,7 @@ exports.run = (client, message) => {
     "Huehue, NO.",
     "Ayy, lmao!",
     "IDK",
-    "I know the answer... but i won't tell it."
+    "I know the answer... but i won't tell it.",
   ];
   var pick = texts[Math.floor(Math.random() * texts.length)];
   message.channel.send(pick);

@@ -1,6 +1,7 @@
-exports.run = async (client, message, args) => {
-  const helpers = require("../helpers/index");
-  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
+import { getOwnerID } from "../helpers";
+
+export default async (_, message, args) => {
+  if (!message.author.id == getOwnerID(message.guild.id)) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }

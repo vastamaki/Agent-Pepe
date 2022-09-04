@@ -1,4 +1,4 @@
-module.exports = (client, member) => {
+const guildMemberAdd = (client, member) => {
   // member
   //   .addRole(member.guild.roles.find(role => role.name === "Member"))
   //   .catch(error => console.log(error));
@@ -9,3 +9,5 @@ module.exports = (client, member) => {
   //   .setFooter(new Date());
   // client.channels.get("528036888330633220").send(message);
 };
+
+export default guildMemberAdd;

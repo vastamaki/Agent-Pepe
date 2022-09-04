@@ -1,4 +1,4 @@
-exports.run = async (client, message, args, role) => {
+export default async (_, message) => {
   message.guild.channels
     .create("new-general", {
       reason: "Needed a cool new channel",

@@ -2,33 +2,35 @@
   "name": "agent-pepe",
   "version": "1.0.0",
   "description": "",
-  "main": "agent.js",
+  "main": "agent.ts",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "ts-node-esm --experimental-specifier-resolution=node -r tsconfig-paths/register index.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheScriptwriter/Agent-Pepe.git"
+    "url": "git+https://github.com/vastamaki/Agent-Pepe.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/TheScriptwriter/Agent-Pepe/issues"
+    "url": "https://github.com/vastamaki/Agent-Pepe/issues"
   },
-  "homepage": "https://github.com/TheScriptwriter/Agent-Pepe#readme",
+  "homepage": "https://github.com/vastamaki/Agent-Pepe#readme",
   "dependencies": {
-    "@discordjs/voice": "^0.7.5",
-    "better-sqlite3": "^7.4.4",
-    "discord.js": "^13.2.0",
-    "dotenv": "^16.0.1",
-    "enmap": "^5.8.7",
-    "ffmpeg-static": "^4.4.0",
+    "@discordjs/voice": "^0.11.0",
+    "better-sqlite3": "^7.6.2",
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.2",
     "ms": "^2.1.3",
-    "node-fetch": "^3.0.0",
-    "request": "^2.88.2"
+    "node-fetch": "^3.2.10"
   },
-  "engines": {
-    "node": "16.x"
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^18.7.14",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.8.2"
   }
 }

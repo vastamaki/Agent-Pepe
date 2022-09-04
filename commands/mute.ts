@@ -1,9 +1,8 @@
-const Discord = require("discord.js");
-const ms = require("ms");
+import { getOwnerID } from "../helpers";
+import ms from "ms";
 
-exports.run = async (client, message, args) => {
-  const helpers = require("../helpers/index");
-  if (!message.author.id == helpers.getOwnerID(message.guild.id)) {
+export default async (_, message, args) => {
+  if (!message.author.id == getOwnerID(message.guild.id)) {
     return;
   }
   let tomute = message.guild.member(
@@ -22,7 +21,7 @@ exports.run = async (client, message, args) => {
     `Käyttäjä <@${tomute.id}> on mykistetty ${ms(ms(mutetime))} ajaksi.`
   );
 
-  setTimeout(function() {
+  setTimeout(function () {
     tomute.removeRole(muterole.id);
     message.channel.send(
       `Käyttäjän <@${tomute.id}> mykistys on nyt poistettu!`
