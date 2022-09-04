@@ -1,8 +1,15 @@
 import Database from "better-sqlite3";
+import { Client, Message, Collection } from "discord.js";
+import { getOwnerId } from "../helpers";
 
-const messageCreate = async (message, client) => {
-  if (message.author.bot) return;
-  const sql = new Database(`./databases/${message.guild.id}.sqlite`);
+interface DiscordClient extends Client {
+  commands: Collection<unknown, any>;
+}
+
+const messageCreate = async (message: Message, client: DiscordClient) => {
+  if (message.author.bot || !message.guildId) return;
+
+  const sql = new Database(`./databases/${message.guildId}.sqlite`);
 
   const mentionedUser = message.mentions.users.first();
 
@@ -12,35 +19,43 @@ const messageCreate = async (message, client) => {
       .get();
 
     if (user) {
-      console.log(user);
-      console.log(message.author);
       if (user.afk) {
         const replyMessage = await message.channel.send(
           `${message.mentions.users.first()} is afk. Status: ${user.reason}`
         );
 
-        replyMessage.delete({ timeout: 5000 });
+        replyMessage.delete();
       }
     }
   }
 
   //no stuff under this line, it will never get runned.
   const { prefix } = sql.prepare(`SELECT * FROM config`).get();
+
   if (message.content.indexOf(prefix) !== 0) return;
+
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
+
+  const command = args.shift();
 
   const cmd = client.commands.get(command);
 
   if (cmd) {
-    return cmd.run(client, message, args);
+    const isAdmin = getOwnerId(message.guildId, message.author.id);
+    return cmd(client, message, {
+      args,
+      isAdmin,
+    });
   }
+
   const replyMessage = await message.reply(
-    `Sorry, i don't know command: ${command} :/`
+    `Sorry, I haven't learnt that command yet.`
   );
 
-  await replyMessage.delete({ timeout: 3000 });
-  await message.delete({ timeout: 3000 });
+  setTimeout(async () => {
+    await replyMessage.delete();
+    await message.delete();
+  }, 3000);
 };
 
 export default messageCreate;

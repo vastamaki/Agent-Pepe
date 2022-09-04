@@ -1,4 +1,6 @@
-export default async (_, message) => {
+import { cmd } from "../types";
+
+export default async ({ client, message, options }: cmd) => {
   var texts = [
     "Yes",
     "No",
@@ -33,6 +35,7 @@ export default async (_, message) => {
     "IDK",
     "I know the answer... but i won't tell it.",
   ];
-  var pick = texts[Math.floor(Math.random() * texts.length)];
+
+  const pick = texts[Math.floor(Math.random() * texts.length)];
   message.channel.send(pick);
 };

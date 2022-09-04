@@ -18,7 +18,7 @@ import verify from "./verify";
 import whomademe from "./whomademe";
 
 export default {
-  ball,
+  "8ball": ball,
   addrole,
   afk,
   ban,

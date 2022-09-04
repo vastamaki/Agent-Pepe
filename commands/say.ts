@@ -1,19 +1,24 @@
-import { getOwnerID } from "../helpers";
+import { ChannelType } from "discord.js";
+import { cmd } from "../types";
 
-export default async (client, message, args) => {
-  if (!message.author.id === getOwnerID(message.guild.id)) {
+export default async ({ client, message, options }: cmd) => {
+  if (!options.isAdmin) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
+
+  await message.delete();
+
   if (message.mentions.channels.first()) {
-    let channel = args[0];
-    const message = args.slice(1).join(" ");
-    channel = channel.replace(/\D/g, "");
-    message.delete();
-    client.channels.get(channel).send(message);
+    const destinationChannel = options.args[0].replace(/\D/g, "");
+    const msg = options.args.slice(1).join(" ");
+    const channel = client.channels.cache.get(destinationChannel);
+
+    if (channel?.type === ChannelType.GuildText) {
+      channel.send(msg);
+    }
   } else {
-    message.delete();
-    const msg = args.join(" ");
+    const msg = options.args.join(" ");
     message.channel.send(msg);
   }
 };

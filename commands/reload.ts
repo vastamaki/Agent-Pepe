@@ -1,14 +1,14 @@
-import { getOwnerID } from "../helpers";
+import { cmd } from "../types";
 
-export default async (client, message, args) => {
-  if (!message.author.id === getOwnerID(message.guild.id)) {
+export default async ({ client, message, options }: cmd) => {
+  if (!options.isAdmin) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
-  if (!args || args.size < 1)
+  if (!options.args || options.args.length < 1)
     return message.reply("please provide a command name to reload.");
 
-  const commandName = args[0];
+  const commandName = options.args[0];
 
   if (!client.commands.has(commandName)) {
     return message.reply("Seems that command does not exist :/");

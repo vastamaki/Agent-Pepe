@@ -1,9 +1,6 @@
-import { getOwnerID } from "../helpers";
+import { cmd } from "../types";
 
-export default async (_, message) => {
-  if (!message.author.id === getOwnerID(message.guild.id)) {
-    message.reply("Hmm. You dont have access to this command.");
-    return;
-  }
+export default async ({ client, message, options }: cmd) => {
+  console.log(options);
   message.reply("Test command executed.");
 };

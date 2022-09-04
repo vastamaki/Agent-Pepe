@@ -1,22 +1,27 @@
-import { getOwnerID } from "../helpers";
+import { cmd } from "../types";
 
-export default async (_, message, args) => {
-  if (!message.author.id === getOwnerID(message.guild.id)) {
+export default async ({ client, message, options }: cmd) => {
+  if (!options.isAdmin) {
     message.reply("Hmm. You dont have access to this command.");
     return;
   }
-  if (message.mentions.members.first()) {
-    var mentionedrole = args[1];
-    let member = message.mentions.members.first();
-    let role = message.guild.roles.cache.find(
+
+  const member = message.mentions.members?.first();
+
+  if (member) {
+    const mentionedrole = options.args[1];
+
+    const role = message.guild?.roles.cache.find(
       (role) => role.name === mentionedrole
     );
-    if (role == null) {
-      message.reply("I was not able to find that role :/");
+
+    if (!role) {
+      message.reply("I wasn't able to find that role :/");
       return;
     }
-    member.roles.add(role.id).catch((err) => console.log(err));
-  } else if (!message.mentions.members.first()) {
+
+    await member.roles.add(role.id);
+  } else {
     message.reply("Mention the user you want to assign this role to! :)");
   }
 };

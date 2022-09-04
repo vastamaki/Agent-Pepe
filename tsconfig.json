@@ -4,16 +4,17 @@
     "module": "ES2020",
     "moduleResolution": "Node",
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "removeComments": true,
     "sourceMap": true,
     "target": "ES2020",
     "outDir": "lib",
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["node"]
   },
-  "include": ["src/**/*.ts", "src"],
+  "include": ["src/**/*.ts", "src", "types"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",

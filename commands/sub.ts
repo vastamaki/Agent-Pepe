@@ -1,8 +1,11 @@
 import { EmbedBuilder } from "discord.js";
+import { cmd } from "../types";
 
-export default async (_, message, args) => {
+const allowedRoles = ["+NSFW"];
+
+export default async ({ client, message, options }: cmd) => {
   message.delete();
-  if (!args[0]) {
+  if (!options.args[0]) {
     const EmbedMessage = new EmbedBuilder().setColor(0x33cc66).addFields([
       {
         name: "Please type one of categories after subscribe!",
@@ -14,22 +17,28 @@ export default async (_, message, args) => {
       },
     ]);
 
-    message.channel.send(EmbedMessage).then((message) => {
-      message.delete({ timeout: 10000 });
+    const replyMessage = await message.channel.send({
+      embeds: [EmbedMessage],
     });
-  } else {
-    const allowedRoles = ["+NSFW"];
-    if (allowedRoles.includes(args[0])) {
-      message.member.roles.add(
-        message.guild.roles.cache.find((role) => role.name === args[0])
-      );
-      message.reply(`Unsub successfull!`).then((message) => {
-        message.delete({ timeout: 3000 });
-      });
-    } else {
-      message.reply(
-        `You are not allowed to give this role to yourself. Nice to try tho :)`
-      );
+
+    setTimeout(() => replyMessage.delete(), 10000);
+    return;
+  }
+
+  if (allowedRoles.includes(options.args[0])) {
+    const role = message.guild?.roles.cache.find(
+      (role) => role.name === options.args[0]
+    );
+
+    if (role) {
+      message.member?.roles.add(role);
+      const replyMessage = await message.reply(`Unsub successfull!`);
+
+      setTimeout(() => replyMessage.delete(), 3000);
     }
+  } else {
+    message.reply(
+      "You are not allowed to give this role to yourself. Nice to try tho :)"
+    );
   }
 };

@@ -1,13 +1,16 @@
 import Database from "better-sqlite3";
 import { mkdirSync, writeFile, existsSync } from "fs";
 
-export const getOwnerID = (guildID: string) => {
-  const sql = new Database(`./databases/${guildID}.sqlite`);
-  const row = sql.prepare(`SELECT * FROM admins`).get();
-  if (row) {
-    console.log(`Admin found`);
-    return row.id;
-  }
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+export const getOwnerId = (guildId: string, authorId: string) => {
+  const sql = new Database(`./databases/${guildId}.sqlite`);
+  const row: any = sql
+    .prepare("SELECT * FROM admins WHERE id = ?")
+    .get(authorId);
+
+  return !!row;
 };
 
 export const initBot = () => {

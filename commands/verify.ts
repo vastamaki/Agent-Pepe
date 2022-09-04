@@ -1,32 +1,33 @@
-import { getOwnerID } from "../helpers";
+import { ChannelType } from "discord.js";
+import { cmd } from "../types";
 
-export default async (_, message) => {
-  if (message.channel.name == "verify") {
-    let member = message.mentions.members.first();
+export default async ({ client, message, options }: cmd) => {
+  if (message.channel.type !== ChannelType.GuildText) return;
+  if (message.channel.name !== "verify") return;
 
-    if (member && !message.author.id === getOwnerID(message.guild.id)) {
-      if (member.roles.some((r) => ["Verified"].includes(r.name))) {
-        message.delete();
-        return message.channel.send(`${member} is already verified.`);
-      } else {
-        message.delete();
-        let role = message.guild.roles.find((r) => r.name === "Verified");
-        member
-          .addRole(role)
-          .catch((error) =>
-            message.reply(`Couldn't verify member because of: ${error}`)
-          );
-        return message.channel.send(`${member} is now verified, woohoo!!!!`);
-      }
+  const member = message.mentions.members?.first();
+
+  await message.delete();
+
+  if (options.isAdmin) {
+    if (message.member?.roles.cache.has("Verified")) {
+      return await message.channel.send(`${member} is already verified.`);
     }
 
-    if (!message.member.roles.some((r) => ["Verified"].includes(r.name))) {
-      message.delete();
+    const role = message.guild?.roles.cache.find(
+      (role) => role.name === "Verified"
+    );
+    if (role) {
+      member?.roles.add(role);
+
+      return message.channel.send(`${member} is now verified, woohoo!!!!`);
+    }
+  } else {
+    if (message.member?.roles.cache.has("Verified")) {
       return message.reply(
         `want's to get verified. Waiting for admin approval.`
       );
     } else {
-      message.delete();
       return message.reply(`You are already verified!`);
     }
   }

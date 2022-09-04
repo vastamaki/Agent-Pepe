@@ -1,11 +1,21 @@
-export default async (_, message) => {
-  message.guild.channels
-    .create("new-general", {
-      reason: "Needed a cool new channel",
-      parent: {
-        id: 498876534736683049,
-      },
-    })
-    .then(console.log)
-    .catch(console.error);
+import { ChannelType } from "discord.js";
+import { cmd } from "../types";
+
+const typeToNumber = (type: string) => {
+  switch (type) {
+    case "text":
+      return ChannelType.GuildText;
+    case "voice":
+      return ChannelType.GuildVoice;
+    default:
+      break;
+  }
+};
+
+export default async ({ client, message, options }: cmd) => {
+  await message.guild?.channels.create({
+    name: options.args[0],
+    type: typeToNumber(options.args[1]),
+    reason: "Needed a new channel",
+  });
 };

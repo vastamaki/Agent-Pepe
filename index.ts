@@ -17,6 +17,7 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.MessageContent,
   ],
 }) as DiscordClient;
 
@@ -34,13 +35,8 @@ for (const event of eventFiles) {
 }
 
 for (const file of commandFiles) {
-  console.log(file);
-  const commandName = file.split(".")[0];
-
-  client.commands.set(commandName, file);
-  console.log(`Command ${commandName} loaded successfully!`);
+  client.commands.set(file, commands[file]);
+  console.log(`Command ${file} loaded successfully!`);
 }
-
-console.log(process.env.DISCORD_BOT_TOKEN);
 
 client.login(process.env.DISCORD_BOT_TOKEN);

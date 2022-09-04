@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
 import { EmbedBuilder } from "discord.js";
+import { cmd } from "../types";
 
-export default async (_, message) => {
+export default async ({ client, message, options }: cmd) => {
   const req = await fetch("https://dog.ceo/api/breeds/image/random", {
     method: "GET",
   });

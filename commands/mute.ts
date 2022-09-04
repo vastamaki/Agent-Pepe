@@ -1,30 +1,41 @@
-import { getOwnerID } from "../helpers";
+import { GuildMember, PermissionFlagsBits } from "discord.js";
+import { cmd } from "../types";
 import ms from "ms";
 
-export default async (_, message, args) => {
-  if (!message.author.id == getOwnerID(message.guild.id)) {
+export default async ({ client, message, options }: cmd) => {
+  if (!options.isAdmin) {
     return;
   }
-  let tomute = message.guild.member(
-    message.mentions.users.first() || message.guild.members.get(args[0])
-  );
-  if (!tomute) return message.reply("Käyttäjää ei löydy.");
-  if (tomute.hasPermission("MANAGE_MESSAGES"))
+
+  const tomute = (message.mentions.users.first() ||
+    message.guild?.members.cache.get(options.args[0])) as GuildMember;
+
+  if (!tomute) return message.reply("User not found.");
+
+  if (tomute.permissions.has(PermissionFlagsBits.ManageMessages)) {
     return message.reply("Et voi mykistää tätä käyttäjää!");
-  let muterole = message.guild.roles.find(`name`, "muted");
+  }
 
-  let mutetime = args[1];
-  if (!mutetime) return message.reply("Määritä aika!");
-
-  await tomute.addRole(muterole.id);
-  message.reply(
-    `Käyttäjä <@${tomute.id}> on mykistetty ${ms(ms(mutetime))} ajaksi.`
+  const muterole = message.guild?.roles.cache.find(
+    (role) => role.name === "muted"
   );
 
-  setTimeout(function () {
-    tomute.removeRole(muterole.id);
-    message.channel.send(
-      `Käyttäjän <@${tomute.id}> mykistys on nyt poistettu!`
+  if (!muterole) {
+    return message.reply(
+      "Please create role called 'muted' before using this command"
     );
+  }
+
+  const mutetime = options.args[1];
+
+  if (!mutetime) return message.reply("Please define mute length!");
+
+  await tomute.roles.add(muterole.id);
+
+  message.reply(`User <@${tomute.id}> is now muted for ${ms(ms(mutetime))}`);
+
+  setTimeout(async () => {
+    await tomute.roles.remove(muterole.id);
+    message.channel.send(`User <@${tomute.id}> is now unmuted!`);
   }, ms(mutetime));
 };
