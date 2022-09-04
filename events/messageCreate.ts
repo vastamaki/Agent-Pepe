@@ -24,7 +24,7 @@ const messageCreate = async (message: Message, client: DiscordClient) => {
           `${message.mentions.users.first()} is afk. Status: ${user.reason}`
         );
 
-        replyMessage.delete();
+        setTimeout(() => replyMessage.delete(), 5000);
       }
     }
   }
@@ -42,9 +42,13 @@ const messageCreate = async (message: Message, client: DiscordClient) => {
 
   if (cmd) {
     const isAdmin = getOwnerId(message.guildId, message.author.id);
-    return cmd(client, message, {
-      args,
-      isAdmin,
+    return cmd({
+      client,
+      message,
+      options: {
+        args,
+        isAdmin,
+      },
     });
   }
 

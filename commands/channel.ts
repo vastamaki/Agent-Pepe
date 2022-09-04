@@ -13,9 +13,14 @@ const typeToNumber = (type: string) => {
 };
 
 export default async ({ client, message, options }: cmd) => {
+  const channelType = message.channel.type;
+
   await message.guild?.channels.create({
     name: options.args[0],
     type: typeToNumber(options.args[1]),
     reason: "Needed a new channel",
+    ...(channelType === ChannelType.GuildText && {
+      parent: message.channel.parentId,
+    }),
   });
 };

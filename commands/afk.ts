@@ -25,7 +25,7 @@ export default async ({ client, message, options }: cmd) => {
     )
     .run();
 
-  const replyMessage = await message.reply(
+  const replyMessage = await message.channel.send(
     `You are now in afk with status: ${reason}`
   );
 
