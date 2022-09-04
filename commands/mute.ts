@@ -1,4 +1,4 @@
-import { getOwnerID } from "helpers";
+import { getOwnerID } from "../helpers";
 import ms from "ms";
 
 export default async (_, message, args) => {

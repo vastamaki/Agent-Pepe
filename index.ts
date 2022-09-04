@@ -1,10 +1,12 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+
 import { Client, GatewayIntentBits, Collection } from "discord.js";
-import { readdirSync } from "fs";
 import events from "./events";
 import commands from "./commands";
 
-console.log(commands);
-console.log(events);
+const eventFiles = Object.keys(events);
+const commandFiles = Object.keys(commands);
 
 interface DiscordClient extends Client {
   commands: Collection<unknown, any>;
@@ -26,23 +28,19 @@ process.on("unhandledRejection", (error) => {
   console.error("Unhandled promise rejection:", error);
 });
 
-const allEvents = Object.keys(events);
-
-for (const event of allEvents) {
-  client.on(event, (...args) => allEvents[event](...args, client));
+for (const event of eventFiles) {
+  client.on(event, (...args) => events[event](...args, client));
   console.log(`Event ${event} loaded successfully!`);
 }
 
-const commandFiles = readdirSync(`@commands/commands`).filter((file) =>
-  file.endsWith(".ts")
-);
-
 for (const file of commandFiles) {
-  const command = await import(`@commands/commands/${file}`);
+  console.log(file);
   const commandName = file.split(".")[0];
 
-  client.commands.set(commandName, command);
+  client.commands.set(commandName, file);
   console.log(`Command ${commandName} loaded successfully!`);
 }
+
+console.log(process.env.DISCORD_BOT_TOKEN);
 
 client.login(process.env.DISCORD_BOT_TOKEN);

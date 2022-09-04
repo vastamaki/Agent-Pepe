@@ -1,4 +1,4 @@
-import { getOwnerID } from "helpers";
+import { getOwnerID } from "../helpers";
 
 export default async (_, message) => {
   if (!message.author.id === getOwnerID(message.guild.id)) {

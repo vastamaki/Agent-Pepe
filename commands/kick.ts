@@ -1,4 +1,4 @@
-import { getOwnerID } from "helpers";
+import { getOwnerID } from "../helpers";
 
 export default async (_, message, args) => {
   if (!message.author.id === getOwnerID(message.guild.id)) {
@@ -9,19 +9,17 @@ export default async (_, message, args) => {
   const reason = args.slice(1).join(" ");
   if (member) {
     member
-      .ban({ reason: reason })
+      .kick(reason)
       .catch((error) =>
         message.reply(`Couldn't kick member because of: ${error}`)
       );
     message.delete();
     message.channel.send(
-      `${member} just got banned from the server ${
-        reason ? "because of " + reason + "." : "."
-      }`
+      `${member} just kicked from the server. Reason: ${reason}.`
     );
   } else {
     message.delete();
-    message.channel.send("Please mention user to ban.").then((message) => {
+    message.channel.send("Please mention user to kick.").then((message) => {
       message.delete({ timeout: 3000 });
     });
   }
