@@ -67,9 +67,7 @@ const voiceStateUpdate = async (
             (role) => role.name === "Authorized"
           ),
           allow: [
-            PermissionFlagsBits.Connect,
-            PermissionFlagsBits.MoveMembers,
-            PermissionFlagsBits.ViewChannel,
+            PermissionFlagsBits.MoveMembers
           ],
         },
       ],
