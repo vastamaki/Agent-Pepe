@@ -4,9 +4,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN apt update -y
+RUN apt install ffmpeg -y
 
-RUN npm i ffmpeg-static
+RUN npm ci
 
 COPY . .
 
