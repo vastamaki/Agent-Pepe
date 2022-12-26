@@ -1,6 +1,5 @@
 import ball from "./8ball";
 import addrole from "./addrole";
-import afk from "./afk";
 import ban from "./ban";
 import channel from "./channel";
 import doge from "./doge";
@@ -20,7 +19,6 @@ import whomademe from "./whomademe";
 export default {
   "8ball": ball,
   addrole,
-  afk,
   ban,
   channel,
   doge,

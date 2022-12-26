@@ -1,9 +1,25 @@
 import * as dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "./stack.env" });
 
+import knex from "knex";
 import { Client, GatewayIntentBits, Collection } from "discord.js";
 import events from "./events";
 import commands from "./commands";
+
+export const db = knex({
+  client: "mysql",
+  connection: {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT as unknown as number,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_DB,
+  },
+  pool: {
+    min: 1,
+    max: 1,
+  },
+});
 
 const eventFiles = Object.keys(events);
 const commandFiles = Object.keys(commands);

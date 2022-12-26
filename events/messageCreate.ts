@@ -1,36 +1,24 @@
-import Database from "better-sqlite3";
 import { Client, Message, Collection } from "discord.js";
-import { getOwnerId } from "../helpers";
+import { db } from "index";
+import { isAdmin } from "../helpers";
 
 interface DiscordClient extends Client {
   commands: Collection<unknown, any>;
 }
 
+interface Server {
+  id: number;
+  owner: number;
+  prefix: string;
+}
+
 const messageCreate = async (message: Message, client: DiscordClient) => {
   if (message.author.bot || !message.guildId) return;
 
-  const sql = new Database(`./databases/${message.guildId}.sqlite`);
-
-  const mentionedUser = message.mentions.users.first();
-
-  if (mentionedUser) {
-    const user = sql
-      .prepare(`SELECT * FROM afk WHERE id ='${mentionedUser.id}'`)
-      .get();
-
-    if (user) {
-      if (user.afk) {
-        const replyMessage = await message.channel.send(
-          `${message.mentions.users.first()} is afk. Status: ${user.reason}`
-        );
-
-        setTimeout(() => replyMessage.delete(), 5000);
-      }
-    }
-  }
-
-  //no stuff under this line, it will never get runned.
-  const { prefix } = sql.prepare(`SELECT * FROM config`).get();
+  const { prefix }: Server = await db("servers")
+    .select("*")
+    .where("guildId", "=", message.guildId)
+    .first();
 
   if (message.content.indexOf(prefix) !== 0) return;
 
@@ -41,13 +29,12 @@ const messageCreate = async (message: Message, client: DiscordClient) => {
   const cmd = client.commands.get(command);
 
   if (cmd) {
-    const isAdmin = getOwnerId(message.guildId, message.author.id);
-    return cmd({
+    return await cmd({
       client,
       message,
       options: {
         args,
-        isAdmin,
+        isAdmin: await isAdmin(message.guildId, message.author.id),
       },
     });
   }

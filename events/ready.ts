@@ -1,4 +1,4 @@
-import { initBot, initGuilds } from "../helpers";
+import { initGuilds } from "../helpers";
 import { joinVoiceChannel } from "@discordjs/voice";
 import { ChannelType, Client } from "discord.js";
 
@@ -22,8 +22,7 @@ const ready = async (client: Client) => {
     });
   }
 
-  initBot();
-  initGuilds(client.guilds.cache);
+  await initGuilds(client.guilds.cache);
 };
 
 export default ready;

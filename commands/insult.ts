@@ -1,7 +1,6 @@
-import fetch from "node-fetch";
 import { cmd } from "../types";
 
-export default async ({ client, message, options }: cmd) => {
+export default async ({ message }: cmd) => {
   message.delete();
   const url = "https://insult.mattbas.org/api/insult";
 

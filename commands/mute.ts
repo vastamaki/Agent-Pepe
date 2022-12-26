@@ -32,7 +32,7 @@ export default async ({ client, message, options }: cmd) => {
 
   await tomute.roles.add(muterole.id);
 
-  message.reply(`User <@${tomute.id}> is now muted for ${ms(ms(mutetime))}`);
+  message.reply(`User <@${tomute.id}> is now muted for ${ms(mutetime)}`);
 
   setTimeout(async () => {
     await tomute.roles.remove(muterole.id);
