@@ -2,6 +2,7 @@ version: '3'
 
 services:
   agent-pepe:
+    container_name: agent-pepe
     build:
       dockerfile: Dockerfile
     pull_policy: build
