@@ -6,13 +6,14 @@ services:
     build:
       dockerfile: Dockerfile
     pull_policy: build
-    networks:
-      - mariadb
     env_file:
       - stack.env
     restart: unless-stopped
+    networks:
+      lan:
+        ipv4_address: 10.10.2.37
 
 networks:
-  mariadb:
-    name: MariaDB
+  lan:
+    name: LAN
     external: true
